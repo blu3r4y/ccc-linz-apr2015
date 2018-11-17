@@ -8,7 +8,7 @@ namespace CCC01
     public static class Level
     {
         public static int?[] rods;
-        public const int ROD_NUM = 100;
+        public static int ROD_NUM = 100;
 
         static Level()
         {
@@ -27,7 +27,7 @@ namespace CCC01
 
             for (int i = 1; i < rods.Length; i++)
             {
-                if (rods[i] != null)
+                if (rods[i] != null && i != 120)
                 {
                     sb.Append(" " + i + " " + rods[i]);
                 }
