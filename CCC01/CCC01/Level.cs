@@ -27,7 +27,7 @@ namespace CCC01
 
             for (int i = 1; i < rods.Length; i++)
             {
-                if (rods[i] != null && i != 120)
+                if (rods[i] != null)
                 {
                     sb.Append(" " + i + " " + rods[i]);
                 }
@@ -36,11 +36,11 @@ namespace CCC01
             return sb.ToString();
         }
 
-        public static string lowerEverySecond()
+        public static string endState()
         {
             reinitRods();
 
-            for (int i = 1; i < ROD_NUM + 1; i = i + 2)
+            for (int i = 1; i < ROD_NUM + 1; i = i++)
             {
                 rods[i] = 0;
             }
@@ -49,50 +49,11 @@ namespace CCC01
             return str;
         }
 
-        public static string liftTheLoweredToM5()
+        public static string lowerEverySecond(int v = 2)
         {
             //reinitRods();
 
-            for (int i = 2; i < ROD_NUM + 1; i = i + 2)
-            {
-                rods[i] = -5;
-            }
-
-            string str = buildMoveCommand();
-            return str;
-        }
-
-        public static string lowerInbetween()
-        {
-            //reinitRods();
-
-            for (int i = 1; i < ROD_NUM + 1; i = i + 2)
-            {
-                rods[i] = null;
-            }
-
-            string str = buildMoveCommand();
-            return str;
-        }
-
-        public static string moveLiftedTo5()
-        {
-            //reinitRods();
-
-            for (int i = 2; i < ROD_NUM + 1; i = i + 2)
-            {
-                rods[i] = 5;
-            }
-
-            string str = buildMoveCommand();
-            return str;
-        }
-
-        public static string liftTheLoweredTo0()
-        {
-            //reinitRods();
-
-            for (int i = 1; i < ROD_NUM + 1; i = i + 2)
+            for (int i = 1; i < ROD_NUM + 1; i = i + v)
             {
                 rods[i] = 0;
             }
@@ -101,11 +62,24 @@ namespace CCC01
             return str;
         }
 
-        public static string lowerLiftedInPos5()
+        public static string liftTheLowered(int to, int v = 2)
         {
             //reinitRods();
 
-            for (int i = 2; i < ROD_NUM + 1; i = i + 2)
+            for (int i = 2; i < ROD_NUM + 1; i = i + v)
+            {
+                rods[i] = to;
+            }
+
+            string str = buildMoveCommand();
+            return str;
+        }
+
+        public static string lowerInbetween(int v = 2)
+        {
+            //reinitRods();
+
+            for (int i = 1; i < ROD_NUM + 1; i = i + v)
             {
                 rods[i] = null;
             }
@@ -114,11 +88,50 @@ namespace CCC01
             return str;
         }
 
-        public static string liftLowered()
+        public static string moveLiftedTo(int to, int v = 2)
         {
             //reinitRods();
 
-            for (int i = 2; i < ROD_NUM + 1; i = i + 2)
+            for (int i = 2; i < ROD_NUM + 1; i = i + v)
+            {
+                rods[i] = to;
+            }
+
+            string str = buildMoveCommand();
+            return str;
+        }
+
+        public static string liftTheLoweredTo0(int v = 2)
+        {
+            //reinitRods();
+
+            for (int i = 1; i < ROD_NUM + 1; i = i + v)
+            {
+                rods[i] = 0;
+            }
+
+            string str = buildMoveCommand();
+            return str;
+        }
+
+        public static string lowerLiftedInPos5(int v = 2)
+        {
+            //reinitRods();
+
+            for (int i = 2; i < ROD_NUM + 1; i = i + v)
+            {
+                rods[i] = null;
+            }
+
+            string str = buildMoveCommand();
+            return str;
+        }
+
+        public static string liftLowered(int v = 2)
+        {
+            //reinitRods();
+
+            for (int i = 2; i < ROD_NUM + 1; i = i + v)
             {
                 rods[i] = 0;
             }

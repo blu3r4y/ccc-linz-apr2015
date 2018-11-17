@@ -10,7 +10,7 @@ namespace CCC01
     class Program
     {
         private static TcpConnection conn;
-        private static int wait = 1000;
+        private static int wait = 10;
 
         static void Main(string[] args)
         {
@@ -19,44 +19,108 @@ namespace CCC01
             conn.disconnect();
             conn.connect();
 
-            Level.ROD_NUM = int.Parse(command("GET_NUMBER", true)) - 1;
-
-            Level.ROD_NUM = 120;
+            Level.ROD_NUM = int.Parse(command("GET_NUMBER", true));
             Level.reinitRods();
 
-            for (int x = 0; x < 130; x++)
+            bool moveForward = true;
+            bool fastForward = true;
+            bool fastBackward = true;
+
+            forward(2, true); 
+
+            while (true)
             {
-                Level.reinitRods();
-
-                conn.writeLine(Level.lowerEverySecond());
-                waitOkayAndSleep();
-
-                conn.writeLine(Level.liftTheLoweredToM5());
-                waitOkayAndSleep();
-
-                conn.writeLine(Level.lowerInbetween());
-                waitOkayAndSleep();
-
-                conn.writeLine(Level.moveLiftedTo5());
-                waitOkayAndSleep();
-
-                conn.writeLine(Level.liftTheLoweredTo0());
-                waitOkayAndSleep();
-
-                conn.writeLine(Level.lowerLiftedInPos5());
-                waitOkayAndSleep();
-
-                conn.writeLine(Level.liftLowered());
-                waitOkayAndSleep();
+                if (moveForward)
+                {
+                    forward(2, false); 
+                }
+                else
+                {
+                    backward(2, false);
+                }
+                
 
                 int pos = int.Parse(command("GET_POSITION", true));
+                Console.WriteLine("::pos::" + pos);
 
-                if (pos > 1000)
+                if (Math.Abs(pos - 940) <= 10 && moveForward)
+                {
+                    fastForward = false;
+                }
+
+                if (Math.Abs(pos - 520) <= 10 && !moveForward)
+                {
+                    fastBackward = false;
+                }
+                else if (Math.Abs(pos - 955) <= 3)
+                {
+                    moveForward = false;
+                   
+                }
+                else if (Math.Abs(pos - 495) <= 3 && !moveForward)
                 {
                     Console.WriteLine(command("EXIT", true));
                     break;
                 }
             }
+        }
+
+        private static void forward(int v = 2, bool slow = false)
+        {
+            //Level.reinitRods();
+
+            conn.writeLine(Level.lowerEverySecond(v));
+            waitOkayAndSleep();
+
+            conn.writeLine(Level.liftTheLowered(-5, v));
+            waitOkayAndSleep();
+
+            conn.writeLine(Level.lowerInbetween(v));
+            waitOkayAndSleep();
+
+            conn.writeLine(Level.moveLiftedTo(5, v));
+            waitOkayAndSleep();
+
+            conn.writeLine(Level.liftTheLoweredTo0(v));
+            waitOkayAndSleep();
+
+            if (!slow)
+            {
+                conn.writeLine(Level.lowerLiftedInPos5(v));
+                waitOkayAndSleep();
+            }
+
+            conn.writeLine(Level.liftLowered(v));
+            waitOkayAndSleep();
+        }
+
+        private static void backward(int v = 2, bool slow = false)
+        {
+            //Level.reinitRods();
+
+            conn.writeLine(Level.lowerEverySecond(v));
+            waitOkayAndSleep();
+
+            conn.writeLine(Level.liftTheLowered(5, v));
+            waitOkayAndSleep();
+
+            conn.writeLine(Level.lowerInbetween(v));
+            waitOkayAndSleep();
+            
+            conn.writeLine(Level.moveLiftedTo(-5, v));
+            waitOkayAndSleep();
+            
+            conn.writeLine(Level.liftTheLoweredTo0(v));
+            waitOkayAndSleep();
+
+            if (!slow)
+            {
+                conn.writeLine(Level.lowerLiftedInPos5(v));
+                waitOkayAndSleep();
+            }
+
+            conn.writeLine(Level.liftLowered(v));
+            waitOkayAndSleep();
         }
 
         private static string command(string cmd, bool wait)
@@ -84,7 +148,15 @@ namespace CCC01
         private static void waitOkayAndSleep()
         {
             Thread.Sleep(wait);
-            Console.WriteLine(command(null, true));
+
+            string output = command(null, true);
+
+            if (output.ToUpper().Contains("ERROR"))
+            {
+                
+            }
+
+            Console.WriteLine(output);
         }
     }
 }
