@@ -19,49 +19,60 @@ namespace CCC01
             conn.disconnect();
             conn.connect();
 
-            Level.ROD_NUM = int.Parse(command("GET_NUMBER", true));
+            // number
+
+            string get_number = command("GET_NUMBER", true);
+            string[] get_number_split = get_number.Split(' ');
+
+            Level.ROD_NUM_X = int.Parse(get_number_split[0]);
+            Level.ROD_NUM_Y = int.Parse(get_number_split[1]);
+
+            // shape
+
+            string get_shape = command("GET_SHAPE", true);
+            string[] get_shape_split = get_shape.Split(' ');
+
+            int shape1x = int.Parse(get_shape_split[0]);
+            int shape1y = int.Parse(get_shape_split[1]);
+
+            int shape2x = int.Parse(get_shape_split[2]);
+            int shape2y = int.Parse(get_shape_split[3]);
+
+            int shape3x = int.Parse(get_shape_split[4]);
+            int shape3y = int.Parse(get_shape_split[5]);
+
+            int shape4x = int.Parse(get_shape_split[6]);
+            int shape4y = int.Parse(get_shape_split[7]);
+
             Level.reinitRods();
 
-            bool moveForward = true;
-            bool fastForward = true;
-            bool fastBackward = true;
-
-            forward(2, true); 
+            bool right = true;
 
             while (true)
             {
-                if (moveForward)
-                {
-                    forward(2, false); 
-                }
-                else
-                {
-                    backward(2, false);
-                }
+                    forward();
                 
 
-                int pos = int.Parse(command("GET_POSITION", true));
-                Console.WriteLine("::pos::" + pos);
+                // pos
 
-                if (Math.Abs(pos - 940) <= 10 && moveForward)
+                string get_position = command("GET_POSITION", true);
+                string[] get_position_split = get_position.Split(' ');
+
+                int posx = int.Parse(get_position_split[0]);
+                int posy = int.Parse(get_position_split[1]);
+
+                if (posx == 400 && posy == 40)
                 {
-                    fastForward = false;
+                    Level.flip = false;
+                }
+                else if (posx == 400 && posy == 200)
+                {
+                   Console.WriteLine(command("EXIT", true));
+                break;
                 }
 
-                if (Math.Abs(pos - 520) <= 10 && !moveForward)
-                {
-                    fastBackward = false;
-                }
-                else if (Math.Abs(pos - 955) <= 3)
-                {
-                    moveForward = false;
-                   
-                }
-                else if (Math.Abs(pos - 495) <= 3 && !moveForward)
-                {
-                    Console.WriteLine(command("EXIT", true));
-                    break;
-                }
+                Console.WriteLine("::pos::" + posx + ":" + posy);
+
             }
         }
 
@@ -150,12 +161,6 @@ namespace CCC01
             Thread.Sleep(wait);
 
             string output = command(null, true);
-
-            if (output.ToUpper().Contains("ERROR"))
-            {
-                
-            }
-
             Console.WriteLine(output);
         }
     }

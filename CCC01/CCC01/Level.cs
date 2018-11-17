@@ -7,8 +7,13 @@ namespace CCC01
 {
     public static class Level
     {
-        public static int?[] rods;
-        public static int ROD_NUM = 100;
+        public static int?[,] rodsDevX;
+        public static int?[,] rodsDevY;
+
+        public static int ROD_NUM_X = 100;
+        public static int ROD_NUM_Y = 100;
+
+        public static bool flip = true;
 
         static Level()
         {
@@ -17,7 +22,8 @@ namespace CCC01
 
         public static void reinitRods()
         {
-            rods = new int?[ROD_NUM + 1];
+            rodsDevX = new int?[ROD_NUM_X + 1, ROD_NUM_Y + 1];
+            rodsDevY = new int?[ROD_NUM_X + 1, ROD_NUM_Y + 1];
         }
 
         public static string buildMoveCommand()
@@ -25,37 +31,38 @@ namespace CCC01
             StringBuilder sb = new StringBuilder();
             sb.Append("MOVE");
 
-            for (int i = 1; i < rods.Length; i++)
+            for (int x = 1; x < ROD_NUM_X; x++)
             {
-                if (rods[i] != null)
+                for (int y = 1; y < ROD_NUM_Y; y++)
                 {
-                    sb.Append(" " + i + " " + rods[i]);
+                    if (rodsDevX[x, y] != null && rodsDevY[x, y] != null)
+                    {
+                        if (flip)
+                        {
+                            sb.Append(" " + x + " " + y + " " + rodsDevX[x, y] + " " + rodsDevY[x, y]);
+                        }
+                        else
+                        {
+                            sb.Append(" " + x + " " + y + " " + rodsDevY[x, y] + " " + rodsDevX[x, y]);
+                        }
+                    }
                 }
             }
 
             return sb.ToString();
         }
 
-        public static string endState()
-        {
-            reinitRods();
-
-            for (int i = 1; i < ROD_NUM + 1; i = i++)
-            {
-                rods[i] = 0;
-            }
-
-            string str = buildMoveCommand();
-            return str;
-        }
-
         public static string lowerEverySecond(int v = 2)
         {
             //reinitRods();
 
-            for (int i = 1; i < ROD_NUM + 1; i = i + v)
+            for (int x = 1; x < ROD_NUM_X + 1; x = x + 1)
             {
-                rods[i] = 0;
+                for (int y = 1; y < ROD_NUM_Y + 1; y = y + v)
+                {
+                    rodsDevX[x, y] = 0;
+                    rodsDevY[x, y] = 0;
+                }
             }
 
             string str = buildMoveCommand();
@@ -66,9 +73,13 @@ namespace CCC01
         {
             //reinitRods();
 
-            for (int i = 2; i < ROD_NUM + 1; i = i + v)
+            for (int x = 2; x < ROD_NUM_X + 1; x = x + 1)
             {
-                rods[i] = to;
+                for (int y = 2; y < ROD_NUM_Y + 1; y = y + v)
+                {
+                    rodsDevX[x, y] = to;
+                    rodsDevY[x, y] = 0;
+                }
             }
 
             string str = buildMoveCommand();
@@ -79,9 +90,13 @@ namespace CCC01
         {
             //reinitRods();
 
-            for (int i = 1; i < ROD_NUM + 1; i = i + v)
+            for (int x = 1; x < ROD_NUM_X + 1; x = x + 1)
             {
-                rods[i] = null;
+                for (int y = 1; y < ROD_NUM_Y + 1; y = y + v)
+                {
+                    rodsDevX[x, y] = null;
+                    rodsDevY[x, y] = 0;
+                }
             }
 
             string str = buildMoveCommand();
@@ -92,11 +107,15 @@ namespace CCC01
         {
             //reinitRods();
 
-            for (int i = 2; i < ROD_NUM + 1; i = i + v)
+            for (int x = 2; x < ROD_NUM_X + 1; x = x + 1)
             {
-                rods[i] = to;
+                for (int y = 2; y < ROD_NUM_Y + 1; y = y + v)
+                {
+                    rodsDevX[x, y] = to;
+                    rodsDevY[x, y] = 0;
+                }
             }
-
+            
             string str = buildMoveCommand();
             return str;
         }
@@ -105,9 +124,13 @@ namespace CCC01
         {
             //reinitRods();
 
-            for (int i = 1; i < ROD_NUM + 1; i = i + v)
+            for (int x = 1; x < ROD_NUM_X + 1; x = x + 1)
             {
-                rods[i] = 0;
+                for (int y = 1; y < ROD_NUM_Y + 1; y = y + v)
+                {
+                    rodsDevX[x, y] = 0;
+                    rodsDevY[x, y] = 0;
+                }
             }
 
             string str = buildMoveCommand();
@@ -118,9 +141,13 @@ namespace CCC01
         {
             //reinitRods();
 
-            for (int i = 2; i < ROD_NUM + 1; i = i + v)
+            for (int x = 2; x < ROD_NUM_X + 1; x = x + 1)
             {
-                rods[i] = null;
+                for (int y = 2; y < ROD_NUM_Y + 1; y = y + v)
+                {
+                    rodsDevX[x, y] = null;
+                    rodsDevY[x, y] = 0;
+                }
             }
 
             string str = buildMoveCommand();
@@ -131,9 +158,13 @@ namespace CCC01
         {
             //reinitRods();
 
-            for (int i = 2; i < ROD_NUM + 1; i = i + v)
+            for (int x = 2; x < ROD_NUM_X + 1; x = x + 1)
             {
-                rods[i] = 0;
+                for (int y = 2; y < ROD_NUM_Y + 1; y = y + v)
+                {
+                    rodsDevX[x, y] = 0;
+                    rodsDevY[x, y] = 0;
+                }
             }
 
             string str = buildMoveCommand();
